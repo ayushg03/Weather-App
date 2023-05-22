@@ -11,7 +11,7 @@ app.post('/api/weather', async (req, res) => {
 
   try {
     const weatherResponse = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=9303eeb6b7d5d354ba0901355c3698a4`
+      `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid={APIKEY}`
     );
 
     // Extract the relevant weather data from the response
