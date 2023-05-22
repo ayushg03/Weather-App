@@ -1,38 +1,148 @@
-.App {
-  text-align: center;
+/* Reset default styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Set background color */
+body {
+  background-color: #9dd4f6;
+  font-family: 'Roboto', sans-serif;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Weather card */
+.weather-card {
+  background-color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 28px 32px;
+  text-align: center;
+  width: 400px;
+
+  position: relative;
+  transition: 0.6s ease-out;
+  overflow: hidden;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Weather title */
+.weather-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #06283D;
+}
+
+/* Weather condition */
+.weather-condition {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #06283D;
+}
+
+/* Temperature */
+.temperature {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  color: #06283D;
+  font-weight: 800;
+  position: relative;
+  margin-left: -16px;
+}
+
+/* Humidity */
+.humidity {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #06283D;
+}
+
+/* Search bar */
+.search-bar {
+  margin-top: 20px;
+}
+
+/* Input field */
+.search-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+/* Location icon */
+.location-icon {
+  font-size: 24px;
+  margin-right: 10px;
+  color: #06283D;
+}
+
+/* Location info */
+.location-info {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  color: #06283D;
+}
+
+/* Error message */
+.error-message {
+  color: #f00;
+  margin-top: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  /* Weather card */
+  .weather-card {
+    max-width: 300px;
   }
-  to {
-    transform: rotate(360deg);
+
+  /* Weather title */
+  .weather-title {
+    font-size: 20px;
+  }
+
+  /* Temperature */
+  .temperature {
+    font-size: 3rem;
+  }
+
+  /* Humidity */
+  .humidity {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Weather card */
+  .weather-card {
+    max-width: 250px;
+  }
+
+  /* Weather condition */
+  .weather-condition {
+    font-size: 16px;
+  }
+
+  /* Weather title */
+  .weather-title {
+    font-size: 18px;
+  }
+
+  /* Temperature */
+  .temperature {
+    font-size: 2.5rem;
+  }
+
+  /* Humidity */
+  .humidity {
+    font-size: 16px;
   }
 }
