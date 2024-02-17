@@ -2,48 +2,48 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { WiBarometer, WiCloud, WiCloudy, WiDaySunny, WiRain, WiSnow } from 'react-icons/wi';
 import './App.css';
+import { ThreeDots } from 'react-loader-spinner';
 
 const App = () => {
   const [location, setLocation] = useState('');
   const [weatherData, setWeatherData] = useState(null);
   const [data, setData] = useState(null);
   const [today, setToday] = useState(null);
-  const [week,setWeek]=useState(null);
+  const [week, setWeek] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const apiKey = process.env.REACT_APP_API_KEY;
 
   const handleInputChange = (e) => {
     setLocation(e.target.value);
-    if(e.target.value===''){
-
-    }
-      // fetchWeatherData(e.target.value);
-      
-    
   };
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault(); // Prevent form submission
-      if(location===''){
+      if (location === '') {
         window.location.reload();
       }
+      setLoading(true);
       fetchWeatherData(location);
     }
   };
 
-  
+
 
   const fetchWeatherData = async (location) => {
     try {
 
-      axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&appid=9303eeb6b7d5d354ba0901355c3698a4`)
+      axios.get(`https://api.openweathermap.org/geo/1.0/direct?q=${location}&appid=${apiKey}`)
         .then(response1 => {
           const { lat, lon } = response1.data[0];
-          return axios.get(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=73023ffd0325ec02832b91e190a04f6d`);
+          return axios.get(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`);
         })
         .then(response => {
           const { weather } = response.data.current;
           const main = response.data.current;
           console.log(response.data);
+          setLoading(false);
 
 
           // Extract the weather condition, temperature, and humidity
@@ -86,13 +86,13 @@ const App = () => {
 
           function parseDailyData(dailyData) {
             return dailyData.map(day => ({
-                date: formatDate(day.dt),
-                WeatherMain: day.weather[0].main,
-                temperature: day.temp.day
+              date: formatDate(day.dt),
+              WeatherMain: day.weather[0].main,
+              temperature: day.temp.day
             }));
-        }
-        
-        function formatDate(unixTimestamp) {
+          }
+
+          function formatDate(unixTimestamp) {
             const date = new Date(unixTimestamp * 1000);
             const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -100,7 +100,7 @@ const App = () => {
             const month = months[date.getMonth()];
             const dayOfMonth = date.getDate().toString().padStart(2, '0');
             return `${dayOfWeek}, ${month} ${dayOfMonth}`;
-        }
+          }
 
           setToday(parseHourlyData(response.data.hourly));
           setWeek(parseDailyData(response.data.daily));
@@ -137,6 +137,7 @@ const App = () => {
     }
   };
 
+
   return (
     <div className="container">
       <div className="weather-card">
@@ -152,6 +153,21 @@ const App = () => {
             onKeyDown={handleKeyDown}
           />
         </form>
+
+        {(loading == true) &&
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <ThreeDots
+              visible={true}
+              height="80"
+              width="80"
+              color="#9dd4f6"
+              radius="9"
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+          </div>
+        }
 
         {error && <p className="error-message">{error}</p>}
 
@@ -227,7 +243,7 @@ const App = () => {
                 </div>
                 <div className='box1-forecast-week' style={{ marginTop: '10px' }}>
                   {week.map((item, index) => (
-                   (index!=0) && (
+                    (index != 0) && (
                       <div key={index} className="forecast-week">
                         <div className='htext'>{item.date}</div>
                         <div className="weather-icon">
@@ -235,7 +251,7 @@ const App = () => {
                         </div>
                         <div className='htext'>{(item.temperature - 273.15).toFixed(0)}&deg;C</div>
                       </div>
-                   )
+                    )
                   ))}
                 </div>
 

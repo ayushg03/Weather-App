@@ -78,13 +78,13 @@ body {
 }
 .box1-forecast{
   display: flex;
-  overflow: scroll;
+  overflow-x: scroll;
   flex-direction: row;
   justify-content: flex-start;
 }
 .box1-forecast-week{
   display: flex;
-  overflow: scroll;
+  overflow-y: scroll;
   flex-direction: column;
 }
 .line{
