@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { WiBarometer, WiCloud, WiCloudy, WiDaySunny, WiRain, WiSnow } from 'react-icons/wi';
+import { WiBarometer, WiCloud, WiCloudy, WiDayHaze, WiDaySunny, WiFog, WiRain, WiSmoke, WiSnow } from 'react-icons/wi';
 import './App.css';
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -8,6 +8,7 @@ const App = () => {
   const [location, setLocation] = useState('');
   const [weatherData, setWeatherData] = useState(null);
   const [data, setData] = useState(null);
+  const [place,setPlace]=useState(null);
   const [today, setToday] = useState(null);
   const [week, setWeek] = useState(null);
   const [error, setError] = useState(null);
@@ -24,6 +25,11 @@ const App = () => {
       if (location === '') {
         window.location.reload();
       }
+      setError(null);
+      setWeatherData(null);
+      setData(null);
+      setToday(null);
+      setWeek(null);
       setLoading(true);
       fetchWeatherData(location);
     }
@@ -37,12 +43,15 @@ const App = () => {
       axios.get(`https://api.openweathermap.org/geo/1.0/direct?q=${location}&appid=${apiKey}`)
         .then(response1 => {
           const { lat, lon } = response1.data[0];
+          const loc=response1.data[0].name+', '+response1.data[0].state;
+          setPlace(loc);
           return axios.get(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`);
         })
         .then(response => {
           const { weather } = response.data.current;
           const main = response.data.current;
-          console.log(response.data);
+          
+
           setLoading(false);
 
 
@@ -110,13 +119,18 @@ const App = () => {
         })
         .catch(error => {
           console.error('Error fetching weather data:', error);
+          setLoading(false);
           setError('Could not fetch weather data. Please try again later.');
         });
 
     } catch (error) {
       console.error(error);
+      setLoading(false);
       setError('No location found');
       setWeatherData(null);
+      setData(null);
+      setToday(null);
+      setWeek(null);
     }
   };
 
@@ -132,6 +146,12 @@ const App = () => {
         return <WiRain size={64} />;
       case 'Snow':
         return <WiSnow size={64} />;
+      case 'Haze':
+        return <WiDayHaze size={64} />;
+      case 'Fog':
+        return <WiFog size={64}/>;
+      case 'Smoke':
+        return <WiSmoke size={64}/>;
       default:
         return null;
     }
@@ -147,7 +167,7 @@ const App = () => {
           <input
             type="text"
             className="search-input"
-            placeholder="Enter location"
+            placeholder="Enter location and press enter ↵"
             value={location}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
@@ -176,6 +196,9 @@ const App = () => {
 
             <div className='box'>
               <div className='box2'>
+              <div className="weather-condition" style={{display:'flex',justifyContent:'flex-start'}}>
+                  {place}
+                </div>
                 <div className='box1'>
                   <div className="weather-icon">
                     {getWeatherIcon(weatherData.condition)}
